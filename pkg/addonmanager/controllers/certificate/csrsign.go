@@ -142,7 +142,7 @@ func (c *csrSignController) sync(ctx context.Context, syncCtx factory.SyncContex
 		return fmt.Errorf("invalid client certificate generated for addon csr %q", csr.Name)
 	}
 
-	_, err = c.kubeClient.CertificatesV1().CertificateSigningRequests().UpdateStatus(ctx, csr, metav1.UpdateOptions{})
+	_, err = c.kubeClient.CertificatesV1beta1().CertificateSigningRequests().UpdateStatus(ctx, csr, metav1.UpdateOptions{})
 	if err != nil {
 		return err
 	}
