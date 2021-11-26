@@ -3,7 +3,7 @@ package agent
 import (
 	"fmt"
 
-	certificatesv1 "k8s.io/api/certificates/v1"
+	certificatesv1beta1 "k8s.io/api/certificates/v1beta1"
 	"k8s.io/apimachinery/pkg/runtime"
 	addonapiv1alpha1 "open-cluster-management.io/api/addon/v1alpha1"
 	clusterv1 "open-cluster-management.io/api/cluster/v1"
@@ -74,7 +74,7 @@ type RegistrationOption struct {
 	// >>		"resources":["signers"],
 	// >>		"resourceNames":["kubernetes.io/kube-apiserver-client"]...}
 	// +optional
-	CSRApproveCheck func(cluster *clusterv1.ManagedCluster, addon *addonapiv1alpha1.ManagedClusterAddOn, csr *certificatesv1.CertificateSigningRequest) bool
+	CSRApproveCheck func(cluster *clusterv1.ManagedCluster, addon *addonapiv1alpha1.ManagedClusterAddOn, csr *certificatesv1beta1.CertificateSigningRequest) bool
 
 	// PermissionConfig defines the function for an addon to setup rbac permission. This callback doesn't
 	// couple with any concrete RBAC Api so the implementation is expected to ensure the RBAC in the hub
@@ -86,7 +86,7 @@ type RegistrationOption struct {
 	// CSRSign signs a csr and returns a certificate. It is used when the addon has its own customized signer.
 	// The returned byte array shall be a valid non-nil PEM encoded x509 certificate.
 	// +optional
-	CSRSign func(csr *certificatesv1.CertificateSigningRequest) []byte
+	CSRSign func(csr *certificatesv1beta1.CertificateSigningRequest) []byte
 }
 
 type StrategyType string
@@ -106,7 +106,7 @@ func KubeClientSignerConfigurations(addonName, agentName string) func(cluster *c
 	return func(cluster *clusterv1.ManagedCluster) []addonapiv1alpha1.RegistrationConfig {
 		return []addonapiv1alpha1.RegistrationConfig{
 			{
-				SignerName: certificatesv1.KubeAPIServerClientSignerName,
+				SignerName: certificatesv1beta1.KubeAPIServerClientSignerName,
 				Subject: addonapiv1alpha1.Subject{
 					User:   DefaultUser(cluster.Name, addonName, agentName),
 					Groups: DefaultGroups(cluster.Name, addonName),
@@ -138,6 +138,6 @@ func InstallAllStrategy(installNamespace string) *InstallStrategy {
 }
 
 // ApprovalAllCSRs returns true for all csrs.
-func ApprovalAllCSRs(cluster *clusterv1.ManagedCluster, addon *addonapiv1alpha1.ManagedClusterAddOn, csr *certificatesv1.CertificateSigningRequest) bool {
+func ApprovalAllCSRs(cluster *clusterv1.ManagedCluster, addon *addonapiv1alpha1.ManagedClusterAddOn, csr *certificatesv1beta1.CertificateSigningRequest) bool {
 	return true
 }

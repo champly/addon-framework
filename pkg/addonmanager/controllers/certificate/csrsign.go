@@ -12,9 +12,9 @@ import (
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	certificatesinformers "k8s.io/client-go/informers/certificates/v1"
+	certificatesinformers "k8s.io/client-go/informers/certificates/v1beta1"
 	"k8s.io/client-go/kubernetes"
-	certificateslisters "k8s.io/client-go/listers/certificates/v1"
+	certificateslisters "k8s.io/client-go/listers/certificates/v1beta1"
 	"k8s.io/klog/v2"
 	"open-cluster-management.io/addon-framework/pkg/addonmanager/constants"
 	"open-cluster-management.io/addon-framework/pkg/agent"
@@ -97,7 +97,7 @@ func (c *csrSignController) sync(ctx context.Context, syncCtx factory.SyncContex
 	}
 
 	// Do not sigh apiserver cert
-	if csr.Spec.SignerName == certificatesv1.KubeAPIServerClientSignerName {
+	if *csr.Spec.SignerName == certificatesv1.KubeAPIServerClientSignerName {
 		return nil
 	}
 

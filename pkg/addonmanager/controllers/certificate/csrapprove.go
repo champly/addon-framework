@@ -7,15 +7,15 @@ import (
 
 	"github.com/openshift/library-go/pkg/controller/factory"
 	"github.com/openshift/library-go/pkg/operator/events"
-	certificatesv1 "k8s.io/api/certificates/v1"
+	certificatesv1 "k8s.io/api/certificates/v1beta1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	certificatesinformers "k8s.io/client-go/informers/certificates/v1"
+	certificatesinformers "k8s.io/client-go/informers/certificates/v1beta1"
 	"k8s.io/client-go/kubernetes"
-	certificateslisters "k8s.io/client-go/listers/certificates/v1"
+	certificateslisters "k8s.io/client-go/listers/certificates/v1beta1"
 	"k8s.io/klog/v2"
 	"open-cluster-management.io/addon-framework/pkg/addonmanager/constants"
 	"open-cluster-management.io/addon-framework/pkg/agent"
@@ -146,7 +146,8 @@ func (c *csrApprovingController) sync(ctx context.Context, syncCtx factory.SyncC
 		Reason:  "AutoApprovedByHubCSRApprovingController",
 		Message: "Auto approving addon agent certificate.",
 	})
-	_, err = c.kubeClient.CertificatesV1().CertificateSigningRequests().UpdateApproval(ctx, csr.Name, csr, metav1.UpdateOptions{})
+	// _, err = c.kubeClient.CertificatesV1().CertificateSigningRequests().UpdateApproval(ctx, csr.Name, csr, metav1.UpdateOptions{})
+	_, err = c.kubeClient.CertificatesV1beta1().CertificateSigningRequests().UpdateApproval(ctx, csr, metav1.UpdateOptions{})
 	if err != nil {
 		return err
 	}
