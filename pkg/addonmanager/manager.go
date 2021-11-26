@@ -143,7 +143,7 @@ func (a *addonManager) Start(ctx context.Context) error {
 	csrApproveController := certificate.NewCSRApprovingController(
 		kubeClient,
 		clusterInformers.Cluster().V1().ManagedClusters(),
-		kubeInfomers.Certificates().V1().CertificateSigningRequests(),
+		kubeInfomers.Certificates().V1beta1().CertificateSigningRequests(),
 		addonInformers.Addon().V1alpha1().ManagedClusterAddOns(),
 		a.addonAgents,
 		eventRecorder,
@@ -152,7 +152,7 @@ func (a *addonManager) Start(ctx context.Context) error {
 	csrSignController := certificate.NewCSRSignController(
 		kubeClient,
 		clusterInformers.Cluster().V1().ManagedClusters(),
-		kubeInfomers.Certificates().V1().CertificateSigningRequests(),
+		kubeInfomers.Certificates().V1beta1().CertificateSigningRequests(),
 		addonInformers.Addon().V1alpha1().ManagedClusterAddOns(),
 		a.addonAgents,
 		eventRecorder,
