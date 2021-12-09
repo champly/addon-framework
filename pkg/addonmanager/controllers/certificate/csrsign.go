@@ -97,7 +97,7 @@ func (c *csrSignController) sync(ctx context.Context, syncCtx factory.SyncContex
 	}
 
 	// Do not sigh apiserver cert
-	if *csr.Spec.SignerName == certificatesv1.KubeAPIServerClientSignerName {
+	if csr.Spec.SignerName == nil || *csr.Spec.SignerName == certificatesv1.KubeAPIServerClientSignerName {
 		return nil
 	}
 
